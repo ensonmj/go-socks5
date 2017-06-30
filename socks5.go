@@ -2,12 +2,11 @@ package socks5
 
 import (
 	"bufio"
+	"context"
 	"fmt"
 	"log"
 	"net"
 	"os"
-
-	"golang.org/x/net/context"
 )
 
 const (
@@ -57,8 +56,8 @@ type Server struct {
 	authMethods map[uint8]Authenticator
 }
 
-// New creates a new Server and potentially returns an error
-func New(conf *Config) (*Server, error) {
+// New creates a new Server
+func New(conf *Config) *Server {
 	// Ensure we have at least one authentication method enabled
 	if len(conf.AuthMethods) == 0 {
 		if conf.Credentials != nil {
@@ -93,7 +92,7 @@ func New(conf *Config) (*Server, error) {
 		server.authMethods[a.GetCode()] = a
 	}
 
-	return server, nil
+	return server
 }
 
 // ListenAndServe is used to create a listener and serve on it
